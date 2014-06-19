@@ -1,0 +1,6 @@
+-- Call GC's demultiplex
+- Might need custom code to figure out which de-multiplexing scheme to use
+    - GC's original scheme assumes each barcode #i has i N's on the 5' side
+    - Our current scheme with the Hiseq antibiotics all have exactly 8 bases for the barcode
+
+- Use bowtie to align reads, keep them in order
