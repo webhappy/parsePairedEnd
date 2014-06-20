@@ -2,8 +2,7 @@ import numpy as np
 import mysql.connector
 import pandas as pd
 import time
-
-
+import cPickle
 
 def process_both_ends (file_for, file_rev):
     cnx = mysql.connector.connect(user='davidc', password='mysql_password', host='127.0.0.1',  database='CRISPR')
@@ -27,7 +26,6 @@ def process_both_ends (file_for, file_rev):
     both_count = 0
     both_map_to_genes = 0
 
-    #counts = np.zeros(( 32992 * 32992, 2))
     genes_to_idx = {}
     for i in xrange(len(genes)):
         genes_to_idx[genes[i]] = i
@@ -57,11 +55,20 @@ def process_both_ends (file_for, file_rev):
         if rev_mapped:
             rev_count += 1
         if for_mapped and rev_mapped:
-       #     if for_gene and rev_gene:
-      #          both_map_to_genes += 1
-     #           counts_genes[genes_to_idx[for_gene], genes_to_idx[rev_gene]] += 1  # add the count at the matrix position corresponding to these genes
-            both_count += 1
+           both_count += 1
+           if for_gene and rev_gene:
+               both_map_to_genes += 1
+               counts_genes[genes_to_idx[for_gene], genes_to_idx[rev_gene]] += 1  # add the count at the matrix position corresponding to these genes
 
+    # create a summed matrix so that we count combinations on both orientations as the same
+    print "Now creating matrix with summed_counts"
+    summed_counts = np.zeros((NUM_GENES, NUM_GENES))
+    for k in xrange(len(genes)):
+        summed_counts[k,k] = counts_genes[k,k]
+        for j in xrange(k):
+            summed_counts[k,j] = counts_genes[k,j] + counts_genes[j,k]
+
+    cPickle.dump(summed_counts,open('counts_matrix_pickled','w'))
     print '''
     Total count: %i
     For_mapped: %i
@@ -78,6 +85,8 @@ def process_both_ends (file_for, file_rev):
     #         sgRNA_results_file.write(counts[cur_idx][0] + ',' + counts[cur_idx][1]+','+(counts[cur_idx][0]+counts[cur_idx][1]) )
     #         cur_idx += 1
 
-#start = time.time()
-#elapsed = (time.time() - start)
-#print "Took",elapsed,'time'
+if __name__ == '__main__':
+    start = time.time()
+    process_both_ends('output_20mer/R1_FBA_001.sam','output_20mer/R2_FBA_001.sam')
+    elapsed = (time.time() - start)
+    print "Took",elapsed,'sec'
