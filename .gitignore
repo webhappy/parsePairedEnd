@@ -9,3 +9,4 @@ analysis/nupack3.0.3/cache/*
 .idea/*
 *.bam
 *.sam
+counts_matrix_pickled

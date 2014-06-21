@@ -1,10 +1,13 @@
 from subprocess import call
-from Bio import SeqIO
 import sys
 import csv
+
+from Bio import SeqIO
 from Bio import pairwise2
+
 from parameters import *
-from call_bowtie_to_align import *
+from old.call_bowtie_to_align import *
+
 
 #MAPPINGS_TO_EVALUATE = ['pT461']  # ['pT461','pT462']
 

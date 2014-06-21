@@ -385,49 +385,8 @@ if __name__ == "__main__":
             # trim bc and most of priming sequence
             # leave few nucleotides in case of indel in the priming region (introduced by primer)
 
-            #print record_R1.seq,'has barcode',bc_R1
-
-            # r1_match = find_match(str(record_R1.seq).lower(), allOligos, xrange(pos_R1+ROI_start_R1-2,pos_R1+ROI_start_R1+3))
-            # r2_match = find_match(str(record_R2.seq).lower(), allOligos, xrange(pos_R2+ROI_start_R2-2,pos_R2+ROI_start_R2+3))
-
-
-
-            # Below was for debugging the doubles cloning
-            # r1_handle = str(record_R1[pos_R1+ROI_start_R1+20:].seq).upper()
-            # r2_handle = str(record_R2[pos_R2+ROI_start_R2+20:].seq).upper()
-            #
-            # CAS9_HANDLE = 'GTTTTAGAGCTAGAAATAGCAAGTTAAAAT'
-            # R1_EXPECTED_PROMOTER = 'gcaactctctactgtttctccat'.upper()
-            # R2_EXPECTED_PROMOTER = 'GTTGCCTTCATACTGTCGAGCCAT'
-            #
-            # r1_promoter = str(record_R1[pos_R1 : pos_R1+len(R1_EXPECTED_PROMOTER) ].seq)
-            # r2_promoter = str(record_R2[6: 6+len(R2_EXPECTED_PROMOTER) ].seq)
-            # r1_promoter_match = pairwise2.align.localxx(R1_EXPECTED_PROMOTER, r1_promoter)[0]
-            # r2_promoter_match = pairwise2.align.localxx(R2_EXPECTED_PROMOTER, r2_promoter)[0]
-            #
-            # r1_cas9_match = pairwise2.align.globalxx(CAS9_HANDLE[0:len(r1_handle)], r1_handle)[0]
-            # if r1_cas9_match[2] >= 16:
-            #     r1_handle_matches = True
-            # else:
-            #     r1_handle_matches = False
-            #
-            # r2_cas9_match = pairwise2.align.globalxx(CAS9_HANDLE[0:len(r2_handle)], r2_handle)[0]
-            # if r2_cas9_match[2] >= 16:
-            #     r2_handle_matches = True
-            # else:
-            #     r2_handle_matches = False
-            #
-            #
-            # if r1_handle_matches:
-            #     SeqIO.write(record_R1[pos_R1+ROI_start_R1-ROI_offset:pos_R1+ROI_start_R1+ROI_length+ROI_offset],R1_out_fastq_file_if_handle_matches,'fastq')
-            # if r2_handle_matches:
-            #     SeqIO.write(record_R2[pos_R2+ROI_start_R2-ROI_offset:pos_R2+ROI_start_R2+ROI_length+ROI_offset],R2_out_fastq_file_if_handle_matches,'fastq')
-            # ---- end stuff for debugging
-
-            #outFiles[mapping[map_key]].writerow([record_R1[pos_R1+ROI_start_R1:pos_R1+ROI_start_R1+20], record_R2[30:50]])
             SeqIO.write(record_R1[pos_R1+ROI_start_R1-ROI_offset:pos_R1+ROI_start_R1+ROI_length+ROI_offset], h_dmpx_R1s[id][map_key], "fastq")
-            if paired:  # Also write a line for R2's record
-                SeqIO.write(record_R2[pos_R2+ROI_start_R2-ROI_offset:pos_R2+ROI_start_R2+ROI_length+ROI_offset], h_dmpx_R2s[id][map_key], "fastq")
+            SeqIO.write(record_R2[pos_R2+ROI_start_R2-ROI_offset:pos_R2+ROI_start_R2+ROI_length+ROI_offset], h_dmpx_R2s[id][map_key], "fastq")
             readperbc[mapping[map_key]] += 1
             
         toprint="""
